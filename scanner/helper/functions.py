@@ -55,7 +55,7 @@ def peek(file):
     return nextChar
 
 
-def scanner(f):
+def scan_for_token(f):
     currentToken = ""
     currChar = f.read(1)
 
@@ -73,3 +73,18 @@ def scanner(f):
         
         currChar = f.read(1)
         
+
+def file_scanner(filename):
+    
+    tokens = []
+    with open(filename, "r") as f:
+
+        currentToken = ("Start", "")
+        while True:
+            currentToken = scan_for_token(f)
+            
+            if currentToken == None:
+                break
+
+            tokens.append(currentToken)
+    return tokens

@@ -1,18 +1,8 @@
-from helper.functions import scanner
+from helper.functions import file_scanner
 print("Filename: ")
 filename = input()
 
-tokens = []
-with open(filename, "r") as f:
-
-    currentToken = ("Start", "")
-    while True:
-        currentToken = scanner(f)
-        
-        if currentToken == None:
-            break
-
-        tokens.append(currentToken)
+tokens = file_scanner(filename)
 
 print("tokens: ")
 print(tokens)
