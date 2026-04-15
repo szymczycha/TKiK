@@ -1,3 +1,5 @@
+from helper.token import Token, TokenType
+
 smallLeters = "qwertyuiopasdfghjklzxcvbnm"
 bigLetters = smallLeters.upper()
 digits = "1234567890"
@@ -7,19 +9,19 @@ ignored = " \n"
 def matchToken(token):
     # print(f"token: '{token}'")
     if token == "=":
-        return ("equalSign", "=")
+        return Token(TokenType.equalSign, "=")
     if token == "(":
-        return ("leftParen", "(")
+        return Token(TokenType.leftParen, "(")
     if token == ")":
-        return ("rightParen", ")")
+        return Token(TokenType.rightParen, ")")
     if token == "+":
-        return ("plusSign", "+")
+        return Token(TokenType.plusSign, "+")
     if token == "-":
-        return ("minusSign", "-")
+        return Token(TokenType.minusSign, "-")
     if token == "*":
-        return ("multSign", "*")
+        return Token(TokenType.multSign, "*")
     if token == "/":
-        return ("divSign", "/")
+        return Token(TokenType.divSign, "/")
     
     matchesNumber = True
     beforeDot = True
@@ -33,7 +35,7 @@ def matchToken(token):
             matchesNumber = False
             break
     if matchesNumber:
-        return ("number", int(token))
+        return Token(TokenType.number, int(token))
     matchesId = True
     if token[0] in digits:
         matchesId = False
@@ -43,7 +45,7 @@ def matchToken(token):
             matchesId = False
             break
     if matchesId:
-        return ("id", token)
+        return Token(TokenType.id, token)
 
 
     return None
