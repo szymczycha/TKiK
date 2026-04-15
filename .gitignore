@@ -2,3 +2,6 @@
 .python-version
 pyproject.toml
 uv.lock
+__pycache__/
+scanner/helper/__pycache__/
+*.pyc
