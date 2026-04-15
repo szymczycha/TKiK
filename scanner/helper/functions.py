@@ -1,19 +1,31 @@
-from helper.token import Token, TokenType
+from scanner.helper.token import Token, TokenType
 
 smallLeters = "qwertyuiopasdfghjklzxcvbnm"
 bigLetters = smallLeters.upper()
 digits = "1234567890"
-ignored = " \n"
+ignored = ""
 
 
 def matchToken(token):
     # print(f"token: '{token}'")
     if token == "=":
-        return Token(TokenType.equalSign, "=")
+        return Token(TokenType.EQ, token)
+    if token == "<":
+        return Token(TokenType.LT, token)
+    if token == "<=":
+        return Token(TokenType.LE, token)
+    if token == ">":
+        return Token(TokenType.GT, token)
+    if token == ">=":
+        return Token(TokenType.GE, token)
     if token == "(":
         return Token(TokenType.leftParen, "(")
     if token == ")":
         return Token(TokenType.rightParen, ")")
+    if token == "{":
+        return Token(TokenType.leftBrace, "{")
+    if token == "}":
+        return Token(TokenType.rightBrace, "}")
     if token == "+":
         return Token(TokenType.plusSign, "+")
     if token == "-":
@@ -22,6 +34,52 @@ def matchToken(token):
         return Token(TokenType.multSign, "*")
     if token == "/":
         return Token(TokenType.divSign, "/")
+    if token == "\n":
+        return Token(TokenType.NEWLINE, "\n")
+    if token == " ":
+        return Token(TokenType.SPACE, " ")
+    if token == ",":
+        return Token(TokenType.COMMA, ",")
+    if token == ".":
+        return Token(TokenType.DOT, ".")
+    if token == ";":
+        return Token(TokenType.COLON, ";")
+    if token == "&&":
+        return Token(TokenType.LOGIC_AND, "&&")
+    if token == "||":
+        return Token(TokenType.LOGIC_OR, "||")
+    if token == "&":
+        return Token(TokenType.ADDRESS_OF_OPERATOR, "&")
+    if token.lower() == "if":
+        return Token(TokenType.IF, "if")
+    if token.lower() == "else":
+        return Token(TokenType.ELSE, "else")
+    if token.lower() == "for":
+        return Token(TokenType.FOR, "for")
+    if token.lower() == "while":
+        return Token(TokenType.WHILE, "while")
+    if token.lower() == "begin":
+        return Token(TokenType.BEGIN, "begin")
+    if token.lower() == "end":
+        return Token(TokenType.END, "end")
+    if token.lower() == "int":
+        return Token(TokenType.INT_TYPE, "int")
+    if token.lower() == "float":
+        return Token(TokenType.FLOAT_TYPE, "float")
+    if token.lower() == "double":
+        return Token(TokenType.DOUBLE_TYPE, "double")
+    if token.lower() == "char":
+        return Token(TokenType.CHAR_TYPE, "char")
+    if token.lower() == "bool":
+        return Token(TokenType.BOOL_TYPE, "bool")
+    if token.lower() == "void":
+        return Token(TokenType.VOID_TYPE, "void")
+    
+    if token[0] == '"' and token[-1] != '"' and '"' not in token[1:]:
+        return Token(TokenType.UNFINISHED_STRING, token)
+    if token[0] == '"' and token[-1] == '"':
+        return Token(TokenType.STRING, token)
+    
     
     matchesNumber = True
     beforeDot = True
@@ -36,6 +94,7 @@ def matchToken(token):
             break
     if matchesNumber:
         return Token(TokenType.number, int(token))
+    
     matchesId = True
     if token[0] in digits:
         matchesId = False
@@ -48,7 +107,7 @@ def matchToken(token):
         return Token(TokenType.id, token)
 
 
-    return None
+    return Token(TokenType.UNKNOWN, token)
 
 def peek(file):
     currentPos = file.tell()
@@ -70,13 +129,15 @@ def scan_for_token(f):
         if peek(f) == "":
             return matchToken(currentToken)
         
-        if matchToken(currentToken + peek(f)) == None:
+        if matchToken(currentToken + peek(f)).token_type == TokenType.UNKNOWN:
             return matchToken(currentToken)
         
         currChar = f.read(1)
+
+    return Token(TokenType.EOF, "")
         
 
-def file_scanner(filename):
+def file_scanner(filename) -> list[Token]:
     
     tokens = []
     with open(filename, "r") as f:
@@ -85,7 +146,7 @@ def file_scanner(filename):
         while True:
             currentToken = scan_for_token(f)
             
-            if currentToken == None:
+            if currentToken.token_type == TokenType.EOF:
                 break
 
             tokens.append(currentToken)
