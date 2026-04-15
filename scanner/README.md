@@ -90,13 +90,3 @@
 |--------------|----------|------|
 | Koniec pliku | EOF      | koniec wejścia |
 | Nieznany     | UNKNOWN  | nierozpoznany token |
-
----
-
-## Dodatkowe informacje
-
-- Skaner działa sekwencyjnie, czytając plik znak po znaku.
-- Token jest maksymalnie wydłużany (greedy matching), dopóki kolejny znak nie powoduje powstania nieznanego tokena.
-- Słowa kluczowe i typy są rozpoznawane **case-insensitive**.
-- Stringi muszą być ujęte w cudzysłowy (`"`), w przeciwnym razie są oznaczane jako `UNFINISHED_STRING`.
-- Liczby aktualnie obsługują tylko liczby całkowite (`int`).
