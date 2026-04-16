@@ -55,8 +55,6 @@
 | begin| BEGIN    | `begin` |
 | end  | END      | `end` |
 
-*(rozpoznawane bez uwzględniania wielkości liter)*
-
 ### Typy danych
 | Nazwa  | Id tokena   | Regex |
 |--------|------------|-------|
